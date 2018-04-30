@@ -11,11 +11,11 @@ describe('routes : static', () => {
         expect(body).toContain('Welcome to Bloccit');
       });
     });
-    describe('GET /marco', () => {
-      it('should return status code 200 and body should contain "polo"', () => {
-        request.get('http://localhost:3000/marco', (err, res, body) => {
+    describe('GET /about', () => {
+      it('should return status code 200 and have "About Us" in the body of the response', () => {
+        request.get('http://localhost:3000/about', (err, res, body) => {
           expect(res.statusCode).toBe(200);
-          expect(body).toContain('polo');
+          expect(body).toContain('About Us');
         });
       });
     });
