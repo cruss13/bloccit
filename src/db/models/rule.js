@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
       references: {
         model: 'Topics',
         key: 'id',
-        as: 'topicId'.
+        as: 'topicId',
       }
     }
   }, {});
