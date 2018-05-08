@@ -5,7 +5,6 @@ const Topic = require("../../src/db/models").Topic;
 const Post = require("../../src/db/models").Post;
 
 describe("Post", () => {
-
   beforeEach((done) => {
     this.topic;
     this.post;
