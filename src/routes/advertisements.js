@@ -13,7 +13,7 @@ router.get('/advertisements/:id/edit', advertisementController.edit);
 
 router.post('/advertisements/create', advertisementController.create);
 
-router.post('/advertisements/:id/update', advertisementController.update);
+router.post("/advertisements/:id/update", advertisementController.update);
 
 router.post('/advertisements/:id/destroy', advertisementController.destroy);
 

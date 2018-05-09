@@ -59,16 +59,16 @@ describe('routes : topics', () => {
     });
   });
 
-  describe('GET /topics/:id/edit', () => {
-    it('should render a view with an edit topic form', (done) => {
+  describe("GET /topics/:id/edit", () => {
+    it("should render a view with an edit topic form", (done) => {
       request.get(`${base}${this.topic.id}/edit`, (err, res, body) => {
         expect(err).toBeNull();
-        expect(body).toContain('Edit Topic');
-        expect(body).toContain('JS Frameworks');
+        expect(body).toContain("Edit Topic");
+        expect(body).toContain("JS Frameworks");
         done();
-      });
-    });
-  });
+       });
+     });
+   });
 
   describe('POST /topics/:id/update', () => {
     it('should update the topic with the given values', (done) => {

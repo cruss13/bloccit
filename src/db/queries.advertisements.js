@@ -35,14 +35,14 @@ module.exports = {
     })
   },
 
-  updateAdvertisement(id, updateAdvertisement, callback) {
+  updateAdvertisement(id, updatedAdvertisement, callback){
     return Advertisement.findById(id)
     .then((advertisement) => {
-      if(!advertisement) {
-        return callback('Advertisement not found');
+      if(!advertisement){
+        return callback("Advertisement not found");
       }
-      advertisement.update(updateAdvertisement, {
-        fields: Object.keys(updateAdvertisement)
+      advertisement.update(updatedAdvertisement, {
+        fields: Object.keys(updatedAdvertisement)
       })
       .then(() => {
         callback(null, advertisement);

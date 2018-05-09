@@ -33,9 +33,9 @@ module.exports = {
   edit(req, res, next) {
     advertisementQueries.getAdvertisement(req.params.id, (err, advertisement) => {
       if(err || advertisement == null) {
-        res.redirect(404, '/');
+        res.redirect(404, "/");
       } else {
-        res.render('advertisements/edit', {advertisement});
+        res.render("advertisements/edit", {advertisement});
       }
     });
   },
@@ -50,12 +50,12 @@ module.exports = {
     });
   },
 
-  update(req, res, next) {
+  update(req, res, next){
     advertisementQueries.updateAdvertisement(req.params.id, req.body, (err, advertisement) => {
       if(err || advertisement == null) {
         res.redirect(404, `/advertisements/${req.params.id}/edit`);
       } else {
-        red.redirect(`/advertisements/${advertisement.id}`);
+        res.redirect(`/advertisements/${advertisement.id}`);
       }
     });
   },
