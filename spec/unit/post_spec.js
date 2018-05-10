@@ -49,22 +49,22 @@ describe("Post", () => {
         done();
       });
     });
-//    it('should not create a post with missing title, body, or assigned topic', (done) => {
-//      Post.create({
-//        title: 'Pros of Cryosleep during the long journey'
-//      })
-//      .then((post) => {
-//      // the code in this block will not be evaluated since the validation error
-//      // will skip it. Instead, we'll catch the error in the catch block below
-//      // and set the expectations there
-//      done();
-//      })
-//      .catch((err) => {
-//        expect(err.message).toContain("Post.body cannot be null");
-//        expect(err.message).toContain("Post.topicId cannot be null");
-//        done();
-//      })
-//    });
+    it('should not create a post with missing title, body, or assigned topic', (done) => {
+      Post.create({
+        title: 'Pros of Cryosleep during the long journey'
+      })
+      .then((post) => {
+      // the code in this block will not be evaluated since the validation error
+      // will skip it. Instead, we'll catch the error in the catch block below
+      // and set the expectations there
+      done();
+      })
+      .catch((err) => {
+        expect(err.message).toContain("Post.body cannot be null");
+        expect(err.message).toContain("Post.topicId cannot be null");
+        done();
+      })
+    });
   });
 
   describe('#setTopic()', () => {
