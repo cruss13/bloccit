@@ -16,10 +16,10 @@
     }, {});
     Post.associate = function(models) {
     // associations can be defined here
-    Post.belongsTo(models.Topic, {
-       foreignKey: "topicId",
-       onDelete: "CASCADE"
-     });
+      Post.belongsTo(models.Topic, {
+        foreignKey: "topicId",
+        onDelete: "CASCADE"
+      });
    };
    return Post;
  };
