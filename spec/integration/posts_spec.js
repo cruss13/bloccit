@@ -159,7 +159,6 @@ describe("routes : posts", () => {
           })
           .then((post) => {
             expect(this.post.title).toBe("Snowman Building Competition");
-            console.log(post);
             done();
           });
         });

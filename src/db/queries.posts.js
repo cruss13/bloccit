@@ -39,8 +39,10 @@ module.exports = {
     return Post.findById(id)
     .then((post) => {
       if(!post){
+        console.log("Post not found")
         return callback("Post not found");
       }
+      console.log("TEST");
       post.update(updatedPost, {
         fields: Object.keys(updatedPost)
       })
