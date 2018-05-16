@@ -77,9 +77,10 @@ describe("routes : topics", () => {
       it("should create a new topic and redirect", (done) => {
         request.post(options,
           (err, res, body) => {
+            console.log(options);
             Topic.findOne({where: {title: "blink-182 songs"}})
             .then((topic) => {
-              console.log(topic.title);
+              console.log(topic);
               expect(topic.title).toBe("blink-182 songs");
               expect(topic.description).toBe("What's your favorite blink-182 song?");
               done();
