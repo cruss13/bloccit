@@ -79,6 +79,7 @@ describe("routes : topics", () => {
           (err, res, body) => {
             Topic.findOne({where: {title: "blink-182 songs"}})
             .then((topic) => {
+              console.log(topic.title);
               expect(topic.title).toBe("blink-182 songs");
               expect(topic.description).toBe("What's your favorite blink-182 song?");
               done();

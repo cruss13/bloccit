@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {});
   User.associate = function(models) {
+
     User.hasMany(models.Post, {
        foreignKey: "userId",
        as: "posts"
@@ -27,6 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     User.prototype.isAdmin = function() {
       return this.role === "admin";
     };
-    return User;
   };
+  return User;
 };
