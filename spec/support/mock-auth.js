@@ -2,7 +2,7 @@ module.exports = {
 
   fakeIt(app){
     let role, id, email;
-    function middleware(req,res,next){
+    function middleware(req, res, next){
       role = req.body.role || role;
       id = req.body.userId || id;
       email = req.body.email || email;
@@ -15,10 +15,9 @@ module.exports = {
       } else if(id == 0) {
         delete req.user;
       }
-
       if( next ){ next() }
     }
-    function route(req,res){
+    function route(req, res){
       res.redirect("/")
     }
     app.use(middleware)

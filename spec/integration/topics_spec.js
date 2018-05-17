@@ -30,24 +30,25 @@ describe("routes : topics", () => {
   // context of admin user
   describe("admin user performing CRUD actions for Topic", () => {
 
-    beforeEach((done) => {  // before each suite in admin context
-      request.get({         // mock authentication
-        url: "http://localhost:3000/auth/fake",
-        form: {
-          role: "admin"     // mock authenticate as admin user
-        }
-      });
-      done();
-    });
-
-    describe("GET /topics", () => {
-      it("should respond with all topics", (done) => {
-        request.get(base, (err, res, body) => {
-          expect(err).toBeNull();
-          expect(body).toContain("Topics");
-          expect(body).toContain("JS Frameworks");
-          done();
-        });
+    beforeEach((done) => {
+      User.create({
+        email: "admin@example.com",
+        password: "123456",
+        role: "admin"
+      })
+      .then((user) => {
+        request.get({         // mock authentication
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: user.role,     // mock authenticate as admin user
+            userId: user.id,
+            email: user.email
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
       });
     });
 
@@ -72,10 +73,8 @@ describe("routes : topics", () => {
       it("should create a new topic and redirect", (done) => {
         request.post(options,
           (err, res, body) => {
-            console.log(options);
             Topic.findOne({where: {title: "blink-182 songs"}})
             .then((topic) => {
-              console.log(topic);
               expect(topic.title).toBe("blink-182 songs");
               expect(topic.description).toBe("What's your favorite blink-182 song?");
               done();
@@ -160,8 +159,11 @@ describe("routes : topics", () => {
         form: {
           role: "member"
         }
-      });
-      done();
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
     });
 
     describe("GET /topics", () => {
