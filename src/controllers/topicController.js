@@ -62,7 +62,7 @@ module.exports = {
          if(authorized){
            res.render("topics/edit", {topic});
          } else {
-           req.flash("You are not authorized to do that.")
+           req.flash("notice", "You are not authorized to do that.")
            res.redirect(`/topics/${req.params.id}`)
          }
        }
@@ -87,16 +87,6 @@ module.exports = {
          res.redirect(303, "/topics")
        }
      });
-   },
-
-//   destroy(req, res, next){
-//     topicQueries.deleteTopic(req.params.id, (err, topic) => {
-//       if(err){
-//         res.redirect(500, `/topics/${topic.id}`)
-//       } else {
-//         res.redirect(303, "/topics")
-//       }
-//     });
-//   }
+   }
 
 }
