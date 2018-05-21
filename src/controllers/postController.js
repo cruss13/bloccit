@@ -55,33 +55,50 @@ module.exports = {
     });
   },
 
-//  destroy(req, res, next){
-//     postQueries.deletePost(req.params.id, (err, deletedRecordsCount) => {
-//       if(err){
-//         res.redirect(500, `/topics/${req.params.topicId}/posts/${req.params.id}`)
+//  edit(req, res, next){
+//     topicQueries.getTopic(req.params.id, (err, topic) => {
+//       if(err || topic == null){
+//         res.redirect(404, "/");
 //       } else {
-//         res.redirect(303, `/topics/${req.params.topicId}`)
+//         const authorized = new Authorizer(req.user, topic).edit();
+//         if(authorized){
+//           res.render("topics/edit", {topic});
+//         } else {
+//           req.flash("You are not authorized to do that.")
+//           res.redirect(`/topics/${req.params.id}`)
+//         }
+//       }
+//     });
+//   },
+
+  edit(req, res, next){
+     postQueries.getPost(req.params.id, (err, post) => {
+       console.log(req.params.id);
+       if(err || post == null){
+         res.redirect(404, "/");
+       } else {
+         const authorized = new Authorizer(req.user, post).edit();
+         if(authorized){
+           res.render("posts/edit", {post});
+         } else {
+           req.flash("You are not authorized to do that.")
+           res.redirect(`/posts/${req.params.id}`)
+         }
+       }
+     });
+   },
+
+//   edit(req, res, next){
+//     postQueries.getPost(req.params.id, (err, post) => {
+//       if(err || post == null){
+//         res.redirect(404, "/");
+//       } else {
+//         res.render("posts/edit", {post});
 //       }
 //     });
 //   }
 
-  edit(req, res, next){
-    postQueries.getPost(req.params.id, (err, post) => {
-      if(err || post == null){
-        res.redirect(404, "/");
-      } else {
-        const authorized = new Authorizer(req.user, post).edit();
-        if(authorized){
-          res.render("posts/edit", {post});
-        } else {
-          req.flash("You are not authorized to do that.")
-          res.redirect(`/posts/${req.params.topicId}`)
-        }
-      }
-    });
-  },
-
-  update(req, res, next){
+  update(req, res, next) {
     postQueries.updatePost(req, req.body, (err, post) => {
       if(err || post == null){
         res.redirect(404, `/topics/${req.params.topicId}/posts/${req.params.id}/edit`);
@@ -89,6 +106,6 @@ module.exports = {
         res.redirect(`/topics/${req.params.topicId}/posts/${req.params.id}`);
       }
     });
-  },
+  }
 
 }

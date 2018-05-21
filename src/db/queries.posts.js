@@ -24,38 +24,26 @@ module.exports = {
     })
   },
 
-  deletePost(req, callback) {
-    return Post.findById(req.params.id)
-    .then((post)) => {
-      const authorized = new Authorizer(req.user, post).destroy();
-      if(authorized) {
-        post.destroy()
-        .then((res) => {
-          callback(null, deletedRecordsCount);
-        }):
-      } else {
-        req.flash("notice", "You are not authorized to do that.")
-        callback(401);
-      }
-    })
-    .catch((err) => {
-      callback(err);
-    });
-  },
+  deletePost(req, callback){
+     return Post.findById(req.params.id)
+     .then((post) => {
+       const authorized = new Authorizer(req.user, post).destroy();
+       if(authorized) {
+         post.destroy()
+         .then((res) => {
+           callback(null, post);
+         });
+       } else {
+         req.flash("notice", "You are not authorized to do that.")
+         callback(401);
+       }
+     })
+     .catch((err) => {
+       callback(err);
+     });
+   },
 
-//  deletePost(id, callback){
-//     return Post.destroy({
-//       where: { id }
-//     })
-//     .then((deletedRecordsCount) => {
-//       callback(null, deletedRecordsCount);
-//     })
-//     .catch((err) => {
-//       callback(err);
-//     })
-//   }
-
-  updatePost(req, updatedPost, callback) {
+  updatePost(req, updatedPost, callback){
     return Post.findById(req.params.id)
     .then((post) => {
       if(!post){
@@ -74,9 +62,9 @@ module.exports = {
         });
       } else {
         req.flash("notice", "You are not authorized to do that.");
-          callback("Forbidden");
+        callback("Forbidden");
       }
     });
-  },
+   }
 
 }
