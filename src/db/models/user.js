@@ -18,16 +18,21 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: "member"
     }
   }, {});
+
   User.associate = function(models) {
 
     User.hasMany(models.Post, {
       foreignKey: "userId",
       as: "posts"
     });
-
     User.prototype.isAdmin = function() {
       return this.role === "admin";
     };
+    User.hasMany(models.Comment, {
+      foreignKey: "userId",
+      as: "comments"
+    });
+
   };
   return User;
 };
