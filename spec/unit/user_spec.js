@@ -1,3 +1,5 @@
+// npm test spec/unit/user_spec.js
+
 const sequelize = require("../../src/db/models/index").sequelize;
 const User = require("../../src/db/models").User;
 
