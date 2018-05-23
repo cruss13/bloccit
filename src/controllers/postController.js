@@ -24,8 +24,6 @@ module.exports = {
   show(req, res, next){
     postQueries.getPost(req.params.id, (err, post) => {
       if(err || post == null){
-        console.log(err);
-        console.log('this is postController '+post);
         res.redirect(404, "/");
       } else {
         res.render("posts/show", {post});
