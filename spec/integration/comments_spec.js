@@ -266,7 +266,7 @@ describe("routes : comments", () => {
   }); //end context for member trying to delete member comment
 
   //context for admin trying to delete member comment
-  describe("signed in user performing CRUD actions for on another user Comment", () => {
+  describe("admin user performing CRUD actions for on another user Comment", () => {
 
     describe("POST /topics/:topicId/posts/:postId/comments/create", () => {
       beforeEach((done) => {
@@ -310,20 +310,28 @@ describe("routes : comments", () => {
 
     describe("POST /topics/:topicId/posts/:postId/comments/:id/destroy", () => {
       beforeEach((done) => {
-        request.get({
-          url: "http://localhost:3000/auth/fake",
-          form: {
-            role: "member",
-            userId: 7
-          }
-        },
-          (err, res, body) => {
-            done();
-          }
-        );
+        User.create({
+          email: "admin@example.com",
+          password: "123456",
+          role: "admin"
+        })
+        .then((user) => {
+          request.get({         // mock authentication
+            url: "http://localhost:3000/auth/fake",
+            form: {
+              role: user.role,     // mock authenticate as admin user
+              userId: user.id,
+              email: user.email
+            }
+          },
+            (err, res, body) => {
+              done();
+            }
+          );
+        });
       });
 
-      it("should not delete another members comment", (done) => {
+      it("should delete another members comment", (done) => {
         Comment.all()
         .then((comments) => {
           const commentCountBeforeDelete = comments.length;
@@ -331,11 +339,11 @@ describe("routes : comments", () => {
           request.post(
             `${base}${this.topic.id}/posts/${this.post.id}/comments/${this.comment.id}/destroy`,
             (err, res, body) => {
-              expect(res.statusCode).toBe(401);
+              expect(res.statusCode).toBe(302);
               Comment.all()
               .then((comments) => {
                 expect(err).toBeNull();
-                expect(comments.length).toBe(commentCountBeforeDelete);
+                expect(comments.length).toBe(commentCountBeforeDelete - 1);
                 done();
               })
           });
