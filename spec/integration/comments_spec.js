@@ -62,7 +62,7 @@ describe("routes : comments", () => {
     });
   });
 
-  //contest of guest user
+  //context of guest user
   describe("guest attempting to perform CRUD actions for Comment", () => {
     beforeEach((done) => {
       request.get({
