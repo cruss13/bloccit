@@ -186,4 +186,162 @@ describe("routes : comments", () => {
     });
   }); //end context for signed in user
 
+  //context for member trying to delete member comment
+  describe("signed in user performing CRUD actions for on another user Comment", () => {
+
+    describe("POST /topics/:topicId/posts/:postId/comments/create", () => {
+      beforeEach((done) => {
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: "member",
+            userId: this.user.id
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
+      });
+
+      it("should create a new comment and redirect", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/comments/create`,
+          form: {
+            body: "This comment is amazing!"
+          }
+        };
+        request.post(options,
+          (err, res, body) => {
+            Comment.findOne({where: {body: "This comment is amazing!"}})
+            .then((comment) => {
+              expect(comment).not.toBeNull();
+              expect(comment.body).toBe("This comment is amazing!");
+              expect(comment.id).not.toBeNull();
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
+          }
+        );
+      });
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/comments/:id/destroy", () => {
+      beforeEach((done) => {
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: "member",
+            userId: 7
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
+      });
+
+      it("should not delete another members comment", (done) => {
+        Comment.all()
+        .then((comments) => {
+          const commentCountBeforeDelete = comments.length;
+          expect(commentCountBeforeDelete).toBe(1);
+          request.post(
+            `${base}${this.topic.id}/posts/${this.post.id}/comments/${this.comment.id}/destroy`,
+            (err, res, body) => {
+              expect(res.statusCode).toBe(401);
+              Comment.all()
+              .then((comments) => {
+                expect(err).toBeNull();
+                expect(comments.length).toBe(commentCountBeforeDelete);
+                done();
+              })
+          });
+        })
+      });
+    });
+  }); //end context for member trying to delete member comment
+
+  //context for admin trying to delete member comment
+  describe("signed in user performing CRUD actions for on another user Comment", () => {
+
+    describe("POST /topics/:topicId/posts/:postId/comments/create", () => {
+      beforeEach((done) => {
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: "member",
+            userId: this.user.id
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
+      });
+
+      it("should create a new comment and redirect", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/comments/create`,
+          form: {
+            body: "This comment is amazing!"
+          }
+        };
+        request.post(options,
+          (err, res, body) => {
+            Comment.findOne({where: {body: "This comment is amazing!"}})
+            .then((comment) => {
+              expect(comment).not.toBeNull();
+              expect(comment.body).toBe("This comment is amazing!");
+              expect(comment.id).not.toBeNull();
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
+          }
+        );
+      });
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/comments/:id/destroy", () => {
+      beforeEach((done) => {
+        request.get({
+          url: "http://localhost:3000/auth/fake",
+          form: {
+            role: "member",
+            userId: 7
+          }
+        },
+          (err, res, body) => {
+            done();
+          }
+        );
+      });
+
+      it("should not delete another members comment", (done) => {
+        Comment.all()
+        .then((comments) => {
+          const commentCountBeforeDelete = comments.length;
+          expect(commentCountBeforeDelete).toBe(1);
+          request.post(
+            `${base}${this.topic.id}/posts/${this.post.id}/comments/${this.comment.id}/destroy`,
+            (err, res, body) => {
+              expect(res.statusCode).toBe(401);
+              Comment.all()
+              .then((comments) => {
+                expect(err).toBeNull();
+                expect(comments.length).toBe(commentCountBeforeDelete);
+                done();
+              })
+          });
+        })
+      });
+    });
+  }); //end context for admin trying to delete member comment
+
 });
