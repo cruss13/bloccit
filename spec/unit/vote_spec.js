@@ -101,6 +101,23 @@ describe("Vote", () => {
       });
     });
 
+    it("should not create a vote with a value other than 1 or -1", (done) => {
+      Vote.create({
+        value: 2,
+        postId: this.post.id,
+        userId: this.user.id
+      })
+      .then((vote) => {
+        // the code in this block will not be evaluated since the validation error
+        // will skip it. Instead, we'll catch the error in the catch block below
+        // and set the expectations there
+      })
+      .catch((err) => {
+        expect(err.message).toContain("Validation isIn on value failed");
+        done();
+      });
+    });
+
     it("should not create a vote without assigned post or user", (done) => {
       Vote.create({
         value: 1
@@ -219,6 +236,31 @@ describe("Vote", () => {
         this.comment.getPost()
         .then((associatedPost) => {
           expect(associatedPost.title).toBe("My first visit to Proxima Centauri b");
+          done();
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        done();
+      });
+    });
+
+  });
+
+  describe("#getPoints()", () => {
+
+    it("should return a count of all the votes a post has", (done) => {
+      Vote.create({
+        value: 1,
+        userId: this.user.id,
+        postId: this.post.id
+      })
+      .then((vote) => {
+        console.log(vote)
+        console.log(post)
+        this.vote.getPoints()
+        .then((associatedPost) => {
+          expect(this.votes).toBe(1);
           done();
         });
       })
