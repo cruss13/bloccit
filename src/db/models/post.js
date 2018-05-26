@@ -43,15 +43,11 @@
           .map((v) => { return v.value })
           .reduce((prev, next) => { return prev + next });
       };
-      Post.prototype.hasUpvoteFor = function(){
-        if(this.votes.length === 0) return 0
-        return this.votes
-          .map((v) => { return v.value })
-          .reduce((prev, next) => { return prev + next });
+      Post.prototype.hasUpvoteFor = function(userId){
+        if(this.votes.userId == userId && this.votes.value === 1) return true
       };
-      Post.prototype.hasDownvoteFor = function(){
-        if(this.votes.length === 0) return 0
-        return this.votes
+      Post.prototype.hasDownvoteFor = function(userId){
+        if(this.votes.userId == userId && this.votes.value === -1) return true
       };
    };
    return Post;
