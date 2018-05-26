@@ -255,9 +255,8 @@ describe("Vote", () => {
         userId: this.user.id,
         postId: this.post.id
       })
-      .then((vote) => {
-        console.log(vote)
-        vote.postId.getPoints()
+      .then((votes) => {
+        this.post.getPoints()
         .then((associatedPost) => {
           expect(this.votes).toBe(1);
           done();
@@ -280,7 +279,6 @@ describe("Vote", () => {
         postId: this.post.id
       })
       .then((vote) => {
-        console.log(vote)
         vote.postId.hasUpvoteFor()
         .then((associatedPost) => {
           expect(this.votes).toBe(true);
@@ -304,7 +302,6 @@ describe("Vote", () => {
         postId: this.post.id
       })
       .then((vote) => {
-        console.log(vote)
         vote.postId.hasDownvoteFor()
         .then((associatedPost) => {
           expect(this.votes).toBe(true);
