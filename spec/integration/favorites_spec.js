@@ -12,9 +12,13 @@ const Favorite = require("../../src/db/models").Favorite;
 describe("routes : favorites", () => {
 
  beforeEach((done) => {
+
+// #2
    this.user;
    this.topic;
    this.post;
+
+// #3
    sequelize.sync({force: true}).then((res) => {
      User.create({
        email: "starman@tesla.com",
@@ -22,6 +26,7 @@ describe("routes : favorites", () => {
      })
      .then((res) => {
        this.user = res;
+
        Topic.create({
          title: "Expeditions to Alpha Centauri",
          description: "A compilation of reports from recent visits to the star system.",
@@ -49,6 +54,55 @@ describe("routes : favorites", () => {
    });
  });
 
+ describe("guest attempting to favorite on a post", () => {
+
+    beforeEach((done) => {    // before each suite in this context
+
+      request.get({
+        url: "http://localhost:3000/auth/fake",
+        form: {
+          userId: 0
+        }
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
+
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
+
+      it("should not create a new favorite", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+        };
+
+        let favCountBeforeCreate;
+
+// #2
+        this.post.getFavorites()
+        .then((favorites) => {
+          favCountBeforeCreate = favorites.length;
+
+          request.post(options,
+            (err, res, body) => {
+              Favorite.all()
+              .then((favorite) => {
+                expect(favCountBeforeCreate).toBe(favorite.length); // confirm no favorites created
+                done();
+              })
+              .catch((err) => {
+                console.log(err);
+                done();
+              });
+            };
+          )
+        });
+      });
+
+    });
+  });
  //context suites here
 
 });
