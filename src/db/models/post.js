@@ -37,6 +37,12 @@
         foreignKey: "postId",
         as: "favorites"
       });
+      Post.afterCreate((post, callback) => {
+        return models.Favorite.create({
+          userId: post.userId,
+          postId: post.id
+        });
+      });
       Post.hasMany(models.Vote, {
         foreignKey: "postId",
         as: "votes"

@@ -12,13 +12,9 @@ const Favorite = require("../../src/db/models").Favorite;
 describe("routes : favorites", () => {
 
  beforeEach((done) => {
-
-// #2
    this.user;
    this.topic;
    this.post;
-
-// #3
    sequelize.sync({force: true}).then((res) => {
      User.create({
        email: "starman@tesla.com",
@@ -54,10 +50,10 @@ describe("routes : favorites", () => {
    });
  });
 
+ //guest user context
  describe("guest attempting to favorite on a post", () => {
 
-    beforeEach((done) => {    // before each suite in this context
-
+    beforeEach((done) => {
       request.get({
         url: "http://localhost:3000/auth/fake",
         form: {
@@ -68,7 +64,6 @@ describe("routes : favorites", () => {
           done();
         }
       );
-
     });
 
     describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
@@ -77,14 +72,10 @@ describe("routes : favorites", () => {
         const options = {
           url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
         };
-
         let favCountBeforeCreate;
-
-// #2
         this.post.getFavorites()
         .then((favorites) => {
           favCountBeforeCreate = favorites.length;
-
           request.post(options,
             (err, res, body) => {
               Favorite.all()
@@ -96,13 +87,88 @@ describe("routes : favorites", () => {
                 console.log(err);
                 done();
               });
-            };
-          )
+            }
+          );
         });
       });
 
     });
-  });
- //context suites here
+
+  });//end guest user context
+
+ //signed in user context
+ describe("signed in user favoriting a post", () => {
+
+    beforeEach((done) => {
+      request.get({
+        url: "http://localhost:3000/auth/fake",
+        form: {
+          role: "member",
+          userId: this.user.id
+        }
+      },
+        (err, res, body) => {
+          done();
+        }
+      );
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/favorites/create", () => {
+
+      it("should create a favorite", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+        };
+        request.post(options,
+          (err, res, body) => {
+            Favorite.findOne({
+              where: {
+                userId: this.user.id,
+                postId: this.post.id
+              }
+            })
+            .then((favorite) => {
+              expect(favorite).not.toBeNull();
+              expect(favorite.userId).toBe(this.user.id);
+              expect(favorite.postId).toBe(this.post.id);
+              done();
+            })
+            .catch((err) => {
+              console.log(err);
+              done();
+            });
+          }
+        );
+      });
+    });
+
+    describe("POST /topics/:topicId/posts/:postId/favorites/:id/destroy", () => {
+
+      it("should destroy a favorite", (done) => {
+        const options = {
+          url: `${base}${this.topic.id}/posts/${this.post.id}/favorites/create`
+        };
+        let favCountBeforeDelete;
+        request.post(options, (err, res, body) => {
+          this.post.getFavorites()
+          .then((favorites) => {
+            const favorite = favorites[0];
+            favCountBeforeDelete = favorites.length;
+            request.post(`${base}${this.topic.id}/posts/${this.post.id}/favorites/${favorite.id}/destroy`,
+              (err, res, body) => {
+                this.post.getFavorites()
+                .then((favorites) => {
+                  expect(favorites.length).toBe(favCountBeforeDelete - 1);
+                  done();
+                });
+              }
+            );
+          });
+        });
+      });
+
+    });
+
+  });//signed in user context
 
 });
