@@ -247,6 +247,29 @@ describe("Vote", () => {
 
   });
 
+//  describe("#getPoints()", () => {
+
+//    it("should return a count of all the votes a post has", (done) => {
+//      Vote.create({
+//        value: 1,
+//        userId: this.user.id,
+//        postId: this.post.id
+//      })
+//      .then((votes) => {
+//        this.post.getPoints()
+//        .then((associatedPost) => {
+//          expect(this.votes).toBe(1);
+//          done();
+//        });
+//      })
+//      .catch((err) => {
+//        console.log(err);
+//        done();
+//      });
+//    });
+
+//  });
+
   describe("#getPoints()", () => {
 
     it("should return a count of all the votes a post has", (done) => {
@@ -256,11 +279,9 @@ describe("Vote", () => {
         postId: this.post.id
       })
       .then((votes) => {
-        this.post.getPoints()
-        .then((associatedPost) => {
-          expect(this.votes).toBe(1);
-          done();
-        });
+        let points = this.post.getPoints();
+        expect(points).toBe(1);
+        done();
       })
       .catch((err) => {
         console.log(err);
@@ -279,7 +300,8 @@ describe("Vote", () => {
         postId: this.post.id
       })
       .then((vote) => {
-        vote.postId.hasUpvoteFor()
+        let userId = this.user.id
+        this.post.hasUpvoteFor()
         .then((associatedPost) => {
           expect(this.votes).toBe(true);
           done();
@@ -302,7 +324,8 @@ describe("Vote", () => {
         postId: this.post.id
       })
       .then((vote) => {
-        vote.postId.hasDownvoteFor()
+        let userId = this.user.id
+        this.post.hasDownvoteFor()
         .then((associatedPost) => {
           expect(this.votes).toBe(true);
           done();
