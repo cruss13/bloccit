@@ -155,7 +155,7 @@ describe("routes : votes", () => {
                  postId: this.post.id
                }
              })
-             .then((vote) => {              
+             .then((vote) => {
                expect(vote).not.toBeNull();
                expect(vote.value).toBe(-1);
                expect(vote.userId).toBe(this.user.id);
