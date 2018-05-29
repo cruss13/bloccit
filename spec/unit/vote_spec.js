@@ -247,38 +247,25 @@ describe("Vote", () => {
 
   });
 
-//  describe("#getPoints()", () => {
-
-//    it("should return a count of all the votes a post has", (done) => {
-//      Vote.create({
-//        value: 1,
-//        userId: this.user.id,
-//        postId: this.post.id
-//      })
-//      .then((votes) => {
-//        this.post.getPoints()
-//        .then((associatedPost) => {
-//          expect(this.votes).toBe(1);
-//          done();
-//        });
-//      })
-//      .catch((err) => {
-//        console.log(err);
-//        done();
-//      });
-//    });
-
-//  });
-
   describe("#getPoints()", () => {
 
     it("should return a count of all the votes a post has", (done) => {
-      Vote.create({
-        value: 1,
-        userId: this.user.id,
-        postId: this.post.id
+
+      Post.create({
+          title: "Dress code on Proxima b",
+          body: "Spacesuit, space helmet, space boots, and space gloves",
+          topicId: this.topic.id,
+          userId: this.user.id
       })
-      .then((votes) => {
+      .then((post) => {
+        this.post = post;
+        Vote.create({
+          value: 1,
+          userId: this.user.id,
+          postId: this.post.id
+        })
+      })
+      .then((vote) => {
         let points = this.post.getPoints();
         expect(points).toBe(1);
         done();
@@ -290,6 +277,8 @@ describe("Vote", () => {
     });
 
   });
+
+
 
   describe("#hasUpvoteFor()", () => {
 
