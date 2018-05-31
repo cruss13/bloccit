@@ -250,25 +250,17 @@ describe("Vote", () => {
   describe("#getPoints()", () => {
 
     it("should return a count of all the votes a post has", (done) => {
-
-      Post.create({
-          title: "Dress code on Proxima b",
-          body: "Spacesuit, space helmet, space boots, and space gloves",
-          topicId: this.topic.id,
-          userId: this.user.id
+      Vote.create({
+        value: 1,
+        userId: this.user.id,
+        postId: this.post.id
       })
-      .then((post) => {
-        this.post = post;
-        Vote.create({
-          value: 1,
-          userId: this.user.id,
-          postId: this.post.id
-        })
-      })
-      .then((vote) => {
-        let points = this.post.getPoints();
-        expect(points).toBe(1);
-        done();
+      .then((votes) => {
+        this.post.getPoints()
+        .then((associatedPost) => {
+          expect(this.votes).toBe(1);
+          done();
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -277,6 +269,7 @@ describe("Vote", () => {
     });
 
   });
+
 
 
 
@@ -289,8 +282,7 @@ describe("Vote", () => {
         postId: this.post.id
       })
       .then((vote) => {
-        let userId = this.user.id
-        this.post.hasUpvoteFor()
+        vote.postId.hasUpvoteFor()
         .then((associatedPost) => {
           expect(this.votes).toBe(true);
           done();
@@ -301,20 +293,19 @@ describe("Vote", () => {
         done();
       });
     });
-
   });
+
 
   describe("#hasDownvoteFor()", () => {
 
-    it("should return true if a user has an downvote", (done) => {
+    it("should return true if a user has a downvote", (done) => {
       Vote.create({
         value: -1,
         userId: this.user.id,
         postId: this.post.id
       })
       .then((vote) => {
-        let userId = this.user.id
-        this.post.hasDownvoteFor()
+        vote.postId.hasDownvoteFor()
         .then((associatedPost) => {
           expect(this.votes).toBe(true);
           done();
@@ -325,7 +316,6 @@ describe("Vote", () => {
         done();
       });
     });
-
   });
 
 });
