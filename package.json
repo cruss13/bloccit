@@ -1,14 +1,14 @@
 {
-  "name": "bloccit",
+  "name": "Home Team",
   "version": "1.0.0",
-  "description": "A Reddit-like application for users to discuss and share content",
+  "description": "An application for sports bettors to upload and share information",
   "main": "src/server.js",
   "scripts": {
     "test": "export NODE_ENV=test && jasmine",
     "start": "node src/server.js"
   },
   "keywords": [
-    "bloccit"
+    "home team"
   ],
   "author": "CRuss",
   "license": "ISC",
